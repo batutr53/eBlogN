@@ -10,6 +10,8 @@ namespace eBlog.Persistence.Configurations
         {
             builder.HasKey(x => x.Id);
 
+            builder.Property(x => x.CanonicalGroupId).IsRequired();
+
             builder.Property(x => x.MetaTitle).IsRequired().HasMaxLength(200);
             builder.Property(x => x.MetaDescription).IsRequired().HasMaxLength(500);
             builder.Property(x => x.MetaKeywords).HasMaxLength(300);
@@ -18,6 +20,10 @@ namespace eBlog.Persistence.Configurations
             builder.Property(x => x.OpenGraphDescription).HasMaxLength(500);
             builder.Property(x => x.OpenGraphImage).HasMaxLength(500);
             builder.Property(x => x.StructuredDataJson).HasColumnType("text");
+
+            builder.Property(x => x.LanguageCode).IsRequired().HasMaxLength(10);
+
+            builder.HasIndex(x => new { x.CanonicalGroupId, x.LanguageCode }).IsUnique();
         }
     }
 

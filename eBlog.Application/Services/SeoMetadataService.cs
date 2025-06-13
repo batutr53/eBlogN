@@ -50,6 +50,11 @@ namespace eBlog.Application.Services
                 if (canonical == null)
                     return new ErrorDataResult<SeoMetadataDto>("Seo kaydı bulunamadı.");
 
+                var exists = await _repository.AnyAsync(x =>
+                    x.CanonicalGroupId == canonical.CanonicalGroupId && x.LanguageCode == dto.LanguageCode);
+                if (exists)
+                    return new ErrorDataResult<SeoMetadataDto>("Bu dil için varyant zaten mevcut.");
+
                 var entity = _mapper.Map<SeoMetadata>(dto);
                 entity.CanonicalGroupId = canonical.CanonicalGroupId;
 
